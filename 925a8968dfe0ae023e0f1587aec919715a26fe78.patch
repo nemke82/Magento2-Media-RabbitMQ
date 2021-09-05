@@ -1,0 +1,164 @@
+From 925a8968dfe0ae023e0f1587aec919715a26fe78 Mon Sep 17 00:00:00 2001
+From: Nemanja Djuric <ne@nemanja.io>
+Date: Sun, 5 Sep 2021 18:41:53 +0000
+Subject: [PATCH] amqp changes
+
+---
+ .../module-media-content-synchronization/etc/queue_consumer.xml | 2 +-
+ .../etc/queue_publisher.xml                                     | 2 +-
+ .../module-media-content-synchronization/etc/queue_topology.xml | 2 +-
+ .../module-media-gallery-renditions/etc/queue_consumer.xml      | 2 +-
+ .../module-media-gallery-renditions/etc/queue_publisher.xml     | 2 +-
+ .../module-media-gallery-renditions/etc/queue_topology.xml      | 2 +-
+ .../module-media-gallery-synchronization/etc/queue_consumer.xml | 2 +-
+ .../etc/queue_publisher.xml                                     | 2 +-
+ .../module-media-gallery-synchronization/etc/queue_topology.xml | 2 +-
+ vendor/magento/module-media-storage/etc/queue_consumer.xml      | 2 +-
+ vendor/magento/module-media-storage/etc/queue_publisher.xml     | 2 +-
+ vendor/magento/module-media-storage/etc/queue_topology.xml      | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/vendor/magento/module-media-content-synchronization/etc/queue_consumer.xml b/vendor/magento/module-media-content-synchronization/etc/queue_consumer.xml
+index 6a141c04c..0813ce48a 100644
+--- a/vendor/magento/module-media-content-synchronization/etc/queue_consumer.xml
++++ b/vendor/magento/module-media-content-synchronization/etc/queue_consumer.xml
+@@ -7,5 +7,5 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+     <consumer name="media.content.synchronization" queue="media.content.synchronization"
+-              connection="db" handler="Magento\MediaContentSynchronization\Model\Consume::execute"/>
++              connection="amqp" handler="Magento\MediaContentSynchronization\Model\Consume::execute"/>
+ </config>
+diff --git a/vendor/magento/module-media-content-synchronization/etc/queue_publisher.xml b/vendor/magento/module-media-content-synchronization/etc/queue_publisher.xml
+index 9751d1161..29f07c36d 100644
+--- a/vendor/magento/module-media-content-synchronization/etc/queue_publisher.xml
++++ b/vendor/magento/module-media-content-synchronization/etc/queue_publisher.xml
+@@ -7,6 +7,6 @@
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+     <publisher topic="media.content.synchronization">
+-        <connection name="db" exchange="magento-db" disabled="false" />
++        <connection name="amqp" exchange="magento-db" disabled="false" />
+     </publisher>
+ </config>
+diff --git a/vendor/magento/module-media-content-synchronization/etc/queue_topology.xml b/vendor/magento/module-media-content-synchronization/etc/queue_topology.xml
+index 4dc43ef1a..1bafe262a 100644
+--- a/vendor/magento/module-media-content-synchronization/etc/queue_topology.xml
++++ b/vendor/magento/module-media-content-synchronization/etc/queue_topology.xml
+@@ -7,7 +7,7 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+-    <exchange name="magento-db" type="topic" connection="db">
++    <exchange name="magento-db" type="topic" connection="amqp">
+         <binding id="MediaContentSynchronization" topic="media.content.synchronization"
+                  destinationType="queue" destination="media.content.synchronization"/>
+     </exchange>
+diff --git a/vendor/magento/module-media-gallery-renditions/etc/queue_consumer.xml b/vendor/magento/module-media-gallery-renditions/etc/queue_consumer.xml
+index 0c584ac12..5fa94cc84 100644
+--- a/vendor/magento/module-media-gallery-renditions/etc/queue_consumer.xml
++++ b/vendor/magento/module-media-gallery-renditions/etc/queue_consumer.xml
+@@ -7,5 +7,5 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+     <consumer name="media.gallery.renditions.update" queue="media.gallery.renditions.update"
+-              connection="db" handler="Magento\MediaGalleryRenditions\Model\Queue\UpdateRenditions::execute"/>
++              connection="amqp" handler="Magento\MediaGalleryRenditions\Model\Queue\UpdateRenditions::execute"/>
+ </config>
+diff --git a/vendor/magento/module-media-gallery-renditions/etc/queue_publisher.xml b/vendor/magento/module-media-gallery-renditions/etc/queue_publisher.xml
+index 961832989..f6fa1d8dd 100644
+--- a/vendor/magento/module-media-gallery-renditions/etc/queue_publisher.xml
++++ b/vendor/magento/module-media-gallery-renditions/etc/queue_publisher.xml
+@@ -7,6 +7,6 @@
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+     <publisher topic="media.gallery.renditions.update">
+-        <connection name="db" exchange="magento-db" disabled="false" />
++        <connection name="amqp" exchange="magento-db" disabled="false" />
+     </publisher>
+ </config>
+diff --git a/vendor/magento/module-media-gallery-renditions/etc/queue_topology.xml b/vendor/magento/module-media-gallery-renditions/etc/queue_topology.xml
+index 260e9f5f7..a3a7d2165 100644
+--- a/vendor/magento/module-media-gallery-renditions/etc/queue_topology.xml
++++ b/vendor/magento/module-media-gallery-renditions/etc/queue_topology.xml
+@@ -7,7 +7,7 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+-    <exchange name="magento-db" type="topic" connection="db">
++    <exchange name="magento-db" type="topic" connection="amqp">
+         <binding id="MediaGalleryRenditions" topic="media.gallery.renditions.update"
+                  destinationType="queue" destination="media.gallery.renditions.update"/>
+     </exchange>
+diff --git a/vendor/magento/module-media-gallery-synchronization/etc/queue_consumer.xml b/vendor/magento/module-media-gallery-synchronization/etc/queue_consumer.xml
+index 4471d68fd..06f4aa3a9 100644
+--- a/vendor/magento/module-media-gallery-synchronization/etc/queue_consumer.xml
++++ b/vendor/magento/module-media-gallery-synchronization/etc/queue_consumer.xml
+@@ -7,5 +7,5 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+     <consumer name="media.gallery.synchronization" queue="media.gallery.synchronization"
+-              connection="db" handler="Magento\MediaGallerySynchronization\Model\Consume::execute"/>
++              connection="amqp" handler="Magento\MediaGallerySynchronization\Model\Consume::execute"/>
+ </config>
+diff --git a/vendor/magento/module-media-gallery-synchronization/etc/queue_publisher.xml b/vendor/magento/module-media-gallery-synchronization/etc/queue_publisher.xml
+index 1a7cb0484..d36571eb0 100644
+--- a/vendor/magento/module-media-gallery-synchronization/etc/queue_publisher.xml
++++ b/vendor/magento/module-media-gallery-synchronization/etc/queue_publisher.xml
+@@ -7,6 +7,6 @@
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+     <publisher topic="media.gallery.synchronization">
+-        <connection name="db" exchange="magento-db" disabled="false" />
++        <connection name="amqp" exchange="magento-db" disabled="false" />
+     </publisher>
+ </config>
+diff --git a/vendor/magento/module-media-gallery-synchronization/etc/queue_topology.xml b/vendor/magento/module-media-gallery-synchronization/etc/queue_topology.xml
+index 81baefbfc..2748bc47b 100644
+--- a/vendor/magento/module-media-gallery-synchronization/etc/queue_topology.xml
++++ b/vendor/magento/module-media-gallery-synchronization/etc/queue_topology.xml
+@@ -7,7 +7,7 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+-    <exchange name="magento-db" type="topic" connection="db">
++    <exchange name="magento-db" type="topic" connection="amqp">
+         <binding id="MediaGallerySynchronization" topic="media.gallery.synchronization"
+                  destinationType="queue" destination="media.gallery.synchronization"/>
+     </exchange>
+diff --git a/vendor/magento/module-media-storage/etc/queue_consumer.xml b/vendor/magento/module-media-storage/etc/queue_consumer.xml
+index e4c06a47f..634f8f4e7 100644
+--- a/vendor/magento/module-media-storage/etc/queue_consumer.xml
++++ b/vendor/magento/module-media-storage/etc/queue_consumer.xml
+@@ -6,5 +6,5 @@
+  */
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+-    <consumer name="media.storage.catalog.image.resize" queue="media.storage.catalog.image.resize" connection="db" maxMessages="100" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
++    <consumer name="media.storage.catalog.image.resize" queue="media.storage.catalog.image.resize" connection="amqp" maxMessages="100" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
+ </config>
+diff --git a/vendor/magento/module-media-storage/etc/queue_publisher.xml b/vendor/magento/module-media-storage/etc/queue_publisher.xml
+index dab99e2c3..c27b45dc4 100644
+--- a/vendor/magento/module-media-storage/etc/queue_publisher.xml
++++ b/vendor/magento/module-media-storage/etc/queue_publisher.xml
+@@ -7,6 +7,6 @@
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
+     <publisher topic="media.storage.catalog.image.resize">
+-        <connection name="db" exchange="magento-db" />
++        <connection name="amqp" exchange="magento-db" />
+     </publisher>
+ </config>
+diff --git a/vendor/magento/module-media-storage/etc/queue_topology.xml b/vendor/magento/module-media-storage/etc/queue_topology.xml
+index 9bb1ca5ce..55accc769 100644
+--- a/vendor/magento/module-media-storage/etc/queue_topology.xml
++++ b/vendor/magento/module-media-storage/etc/queue_topology.xml
+@@ -6,7 +6,7 @@
+  */
+ -->
+ <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+-    <exchange name="magento-db" type="topic" connection="db">
++    <exchange name="magento-db" type="topic" connection="amqp">
+         <binding id="imageResizeBinding" topic="media.storage.catalog.image.resize" destinationType="queue" destination="media.storage.catalog.image.resize"/>
+     </exchange>
+ </config>
