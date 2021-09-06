@@ -27,13 +27,13 @@ Edit the composer.json file and add the following section to specify:
             }
           }    
 ```
-
-Explanations:
 Text is added in the "extra": { section, with following content:
-Module: "magento/module-name"   ← That’s the Magento 2 Core module we are patching
-Title: We link this with internal subject name.
-URL to patch: That’s link from above and our demo repository.
 
+Explanations: <BR>
+Module: "magento/module-name"   ← That’s the Magento 2 Core module we are patching <BR>
+Title: We link this with internal subject name. <BR>
+URL to patch: That’s link from above and our demo repository. <BR>
+<BR>
 Apply the patch. Use the -v option only if you want to see debugging information.
 ```
 composer -v install
