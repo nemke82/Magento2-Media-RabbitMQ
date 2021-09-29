@@ -43,3 +43,6 @@ Update the composer.lock file. The lock file tracks which patches have been appl
 ```
 composer update --lock
 ```
+    
+IMPORTANT INFO: <BR>
+Please verify that env.php contains correct rabbit creds & above listed consumers are added to consumer_runners if you run consumers using Cron, otherwise it will not run. Also, after patch applied make sure that you execute setup:upgrade and verify if queue is created within RabbitMQ service.
